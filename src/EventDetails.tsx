@@ -10,6 +10,8 @@ interface Event {
 
 interface EventDetailsProps {
   event: Event | null;
+  onDislikeClick: () => void;
+  onLikeClick: () => void;
 }
 
 const defaultEvent: Event = {
@@ -20,7 +22,7 @@ const defaultEvent: Event = {
   image_url: "jazz-cover.jpeg"
 };
 
-const EventDetails: React.FC<EventDetailsProps> = ({ event }) => {
+const EventDetails: React.FC<EventDetailsProps> = ({ event, onDislikeClick, onLikeClick }) => {
   const eventToDisplay = event || defaultEvent;
 
   return (
@@ -34,6 +36,14 @@ const EventDetails: React.FC<EventDetailsProps> = ({ event }) => {
           <p className="card-text">{eventToDisplay.description}</p>
           <p className="card-text"><strong>Location:</strong> {eventToDisplay.location}</p>
           <p className="card-text"><strong>Date:</strong> {eventToDisplay.date}</p>
+          <div className="d-flex justify-content-between">
+            <button className="btn btn-outline-danger thumbs-button" onClick={onDislikeClick}>
+              <i className="far fa-thumbs-down"></i>
+            </button>
+            <button className="btn btn-outline-success thumbs-button" onClick={onLikeClick}>
+              <i className="far fa-thumbs-up"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

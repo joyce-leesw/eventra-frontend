@@ -30,31 +30,23 @@ const App: React.FC = () => {
     fetchEvents();
   }, []);
 
-  const handleClick = (increment: number) => {
-    setCurrentEventIndex(prevIndex => {
-      let newIndex = prevIndex + increment;
-      if (newIndex < 0) {
-        newIndex = events.length - 1;
-      } else if (newIndex >= events.length) {
-        newIndex = 0;
-      }
-      return newIndex;
-    });
+  const handleLikeClick = () => {
+    setCurrentEventIndex(prevIndex => (prevIndex + 1) % events.length);
+  };
+
+  const handleDislikeClick = () => {
+    setCurrentEventIndex(prevIndex => (prevIndex - 1 + events.length) % events.length);
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
       {events.length > 0 && (
         <div className="card flashcard-container">
-          <EventDetails event={events[currentEventIndex]} />
-          <div className="d-flex justify-content-between mt-7">
-            <button className="btn btn-outline-danger thumbs-button" onClick={() => handleClick(-1)}>
-              <i className="far fa-thumbs-down"></i>
-            </button>
-            <button className="btn btn-outline-success thumbs-button" onClick={() => handleClick(1)}>
-              <i className="far fa-thumbs-up"></i>
-            </button>
-          </div>
+          <EventDetails 
+            event={events[currentEventIndex]}
+            onLikeClick={handleLikeClick}
+            onDislikeClick={handleDislikeClick} 
+          />
         </div>
       )}
     </div>
