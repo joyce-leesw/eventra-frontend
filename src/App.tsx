@@ -13,41 +13,50 @@ interface Event {
   image_url: string;
 }
 
-const defaultEvent: Event = {
-  title: "Event Title",
-  description: "Description of the event goes here. This is a brief overview of what the event is about.",
-  location: "Event Location",
-  date: "Event Date",
-  image_url: "jazz-cover.jpeg"
-};
-
 const App: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
+  const [currentEventIndex, setCurrentEventIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/events/');
         setEvents(response.data.events);
-        if (response.data.events.length > 0) {
-          setCurrentEvent(events[4]);
-        } else {
-          setCurrentEvent(defaultEvent);
-        }
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
 
     fetchEvents();
-  }, [events]);
+  }, []);
+
+  const handleClick = (increment: number) => {
+    setCurrentEventIndex(prevIndex => {
+      let newIndex = prevIndex + increment;
+      if (newIndex < 0) {
+        newIndex = events.length - 1;
+      } else if (newIndex >= events.length) {
+        newIndex = 0;
+      }
+      return newIndex;
+    });
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="card flashcard-container">
-        <EventDetails event={currentEvent} />
-      </div>
+      {events.length > 0 && (
+        <div className="card flashcard-container">
+          <EventDetails event={events[currentEventIndex]} />
+          <div className="d-flex justify-content-between mt-7">
+            <button className="btn btn-outline-danger thumbs-button" onClick={() => handleClick(-1)}>
+              <i className="far fa-thumbs-down"></i>
+            </button>
+            <button className="btn btn-outline-success thumbs-button" onClick={() => handleClick(1)}>
+              <i className="far fa-thumbs-up"></i>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
