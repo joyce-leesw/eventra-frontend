@@ -4,7 +4,6 @@ import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
 import EventDetails from './EventDetails';
-import { json } from 'stream/consumers';
 
 interface Event {
   id: number;
@@ -38,7 +37,6 @@ const App: React.FC = () => {
         console.error('Error fetching events:', error);
       }
     };
-
     fetchEvents();
   }, []);
 
@@ -56,7 +54,7 @@ const App: React.FC = () => {
       };
       postPreferences();
     }
-  }, [currentEventIndex, events, preferences]);
+  }, [currentEventIndex, events, preferences, loading]);
 
   const handleLikeClick = () => {
     setPreferences((prevPreferences: Preference[]) => [
