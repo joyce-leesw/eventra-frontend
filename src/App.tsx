@@ -20,6 +20,8 @@ interface Preference {
   liked: boolean;
 }
 
+const API_URL = "http://127.0.0.1:8000";
+
 const App: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState<number>(0);
@@ -29,7 +31,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/events/');
+        const response = await axios.get(`${API_URL}/events/?limit=10`);
         setEvents(response.data.events);
         setLoading(false);
       } catch (error) {
@@ -41,8 +43,18 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (currentEventIndex === events.length) {
+    if (currentEventIndex === events.length && !loading) {
       console.log('preferences: ', JSON.stringify(preferences));
+
+      const postPreferences = async () => {
+        try {
+          const response = await axios.post(`${API_URL}/preferences/`, preferences);
+          console.log('POST response: ', response);
+        } catch (error) {
+          console.error('Error posting preferences:', error);
+        }
+      };
+      postPreferences();
     }
   }, [currentEventIndex, events, preferences]);
 
