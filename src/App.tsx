@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const [currentEventIndex, setCurrentEventIndex] = useState<number>(0);
   const [preferences, setPreferences] = useState<Preference[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -61,7 +62,7 @@ const App: React.FC = () => {
       ...prevPreferences,
       { eventId: events[currentEventIndex].id, liked: true }
     ]);
-    setCurrentEventIndex(prevIndex => prevIndex + 1);
+    handleNext()
   };
 
   const handleDislikeClick = () => {
@@ -69,9 +70,16 @@ const App: React.FC = () => {
       ...prevPreferences,
       { eventId: events[currentEventIndex].id, liked: false }
     ]);
-    setCurrentEventIndex(prevIndex => prevIndex + 1);
+    handleNext()
   };
 
+  const handleNext = () => {
+    setAnimate(true);
+    setTimeout(() => {
+      setAnimate(false);
+      setCurrentEventIndex(prevIndex => prevIndex + 1);
+    }, 500);
+  };
 
   if (loading) {
     return (
@@ -85,7 +93,7 @@ const App: React.FC = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="card flashcard-container">
+      <div className={`card flashcard-container ${animate ? 'move' : ''}`}>
       {events.length > 0 && currentEventIndex < events.length && (
           <EventDetails 
             event={events[currentEventIndex]}
