@@ -27,16 +27,29 @@
   font-size: 2rem;
 }
 
-.flashcard-container.move{
-  animation: moveUpLeft 0.5s forwards
+.flashcard-container.move-left{
+  animation: moveUpLeft 1s forwards
 }
 
-@keyframes  moveUpLeft {
+.flashcard-container.move-right{
+  animation: moveUpRight 1s forwards
+}
+
+@keyframes moveUpLeft {
   0% {
     transform: translate(0, 0) rotate(0deg);
   }
   100% {
     transform: translate(-100%, -100%) rotate(-90deg);
+  }
+}
+
+@keyframes moveUpRight {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(100%, -100%) rotate(90deg);
   }
 }
 

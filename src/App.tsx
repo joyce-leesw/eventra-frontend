@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const [currentEventIndex, setCurrentEventIndex] = useState<number>(0);
   const [preferences, setPreferences] = useState<Preference[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [animate, setAnimate] = useState(false);
+  const [animationClass, setAnimationClass] = useState<string>('');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -57,11 +57,28 @@ const App: React.FC = () => {
     }
   }, [currentEventIndex, events, preferences, loading]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') {
+        handleLikeClick();
+      } else if (event.key === 'ArrowLeft') {
+        handleDislikeClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, );
+
+
   const handleLikeClick = () => {
     setPreferences((prevPreferences: Preference[]) => [
       ...prevPreferences,
       { eventId: events[currentEventIndex].id, liked: true }
     ]);
+    setAnimationClass('move-right');
     handleNext()
   };
 
@@ -70,13 +87,13 @@ const App: React.FC = () => {
       ...prevPreferences,
       { eventId: events[currentEventIndex].id, liked: false }
     ]);
+    setAnimationClass('move-left');
     handleNext()
   };
 
   const handleNext = () => {
-    setAnimate(true);
     setTimeout(() => {
-      setAnimate(false);
+      setAnimationClass('');
       setCurrentEventIndex(prevIndex => prevIndex + 1);
     }, 500);
   };
@@ -93,7 +110,7 @@ const App: React.FC = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className={`card flashcard-container ${animate ? 'move' : ''}`}>
+      <div className={`card flashcard-container  ${animationClass}`}>
       {events.length > 0 && currentEventIndex < events.length && (
           <EventDetails 
             event={events[currentEventIndex]}
@@ -104,6 +121,7 @@ const App: React.FC = () => {
       { currentEventIndex === events.length && events.length !== 0 && (
           <div className="card-body">
             <h5 className="card-title">Thank you for registering your preferences</h5>
+            <p className="card-text">We will use this information to recommend events you'll love.</p>
           </div>
       )}
       </div>
