@@ -4,6 +4,7 @@ import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
 import EventDetails from './EventDetails';
+import { ProgressBar } from 'react-bootstrap';
 
 interface Event {
   id: number;
@@ -108,23 +109,35 @@ const App: React.FC = () => {
     );
   }
 
+  const progress = Math.min((currentEventIndex / events.length) * 100, 100);
+
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className={`card flashcard-container  ${animationClass}`}>
-      {events.length > 0 && currentEventIndex < events.length && (
-          <EventDetails 
-            event={events[currentEventIndex]}
-            onLikeClick={handleLikeClick}
-            onDislikeClick={handleDislikeClick} 
-          />
-      )}
-      { currentEventIndex === events.length && events.length !== 0 && (
-          <div className="card-body">
-            <h5 className="card-title">Thank you for registering your preferences</h5>
-            <p className="card-text">We will use this information to recommend events you'll love.</p>
-          </div>
-      )}
+    <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+      <div className={`card flashcard-container ${animationClass}`}>
+        {events.length > 0 && currentEventIndex < events.length && (
+            <EventDetails 
+              event={events[currentEventIndex]}
+              onLikeClick={handleLikeClick}
+              onDislikeClick={handleDislikeClick} 
+            />
+        )}
+        { currentEventIndex === events.length && events.length !== 0 && (
+            <div className="card-body">
+              <h5 className="card-title">Thank you for registering your preferences</h5>
+              <p className="card-text">We will use this information to recommend events you'll love.</p>
+            </div>
+        )}
       </div>
+      {progress < 100 && (
+        <div>
+          <div className="w-75 mt-3">
+            <ProgressBar now={progress}/>
+          </div>
+          <div className="text-start mt-3">
+            {currentEventIndex} out of {events.length} completed
+          </div>
+        </div>
+      )}
     </div>
   );
 }
