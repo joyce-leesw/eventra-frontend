@@ -115,29 +115,29 @@ const App: React.FC = () => {
     <div className="d-flex flex-column justify-content-center align-items-center vh-100">
       <div className={`card flashcard-container ${animationClass}`}>
         {events.length > 0 && currentEventIndex < events.length && (
-            <EventDetails 
-              event={events[currentEventIndex]}
-              onLikeClick={handleLikeClick}
-              onDislikeClick={handleDislikeClick} 
-            />
+          <EventDetails 
+            event={events[currentEventIndex]}
+            onLikeClick={handleLikeClick}
+            onDislikeClick={handleDislikeClick} 
+          />
         )}
         { currentEventIndex === events.length && events.length !== 0 && (
-            <div className="card-body">
-              <h5 className="card-title">Thank you for registering your preferences</h5>
-              <p className="card-text">We will use this information to recommend events you'll love.</p>
-            </div>
+          <div className="card-body">
+            <h5 className="card-title">Thank you for registering your preferences</h5>
+            <p className="card-text">We will use this information to recommend events you'll love.</p>
+          </div>
         )}
       </div>
-      {progress < 100 && (
-        <div>
-          <div className="w-75 mt-3">
+      <div className="flashcard-progress mt-3 w-100">
+        {progress < 100 && (
+          <div className="flashcard-progress-container w-75 mx-auto">
             <ProgressBar now={progress}/>
+            <div className="text-start mt-3">
+              {currentEventIndex} out of {events.length} completed
+            </div>
           </div>
-          <div className="text-start mt-3">
-            {currentEventIndex} out of {events.length} completed
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
