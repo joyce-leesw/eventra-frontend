@@ -1,5 +1,6 @@
 .flashcard-container {
   width: 1000px;
+  transition: transform 0.5s ease-in-out;
 }
 
 .flashcard-container img {
@@ -25,3 +26,30 @@
 .thumbs-button i {
   font-size: 2rem;
 }
+
+.flashcard-container.move-left{
+  animation: moveUpLeft 1s forwards
+}
+
+.flashcard-container.move-right{
+  animation: moveUpRight 1s forwards
+}
+
+@keyframes moveUpLeft {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(-100%, -100%) rotate(-90deg);
+  }
+}
+
+@keyframes moveUpRight {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(100%, -100%) rotate(90deg);
+  }
+}
+
